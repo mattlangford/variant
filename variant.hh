@@ -55,11 +55,18 @@ public: ///////////////////////////////////////////////////////////////////////
     void operator=(T&& t);
 
     ///
-    /// Get a specific type out of the variant, this is just a reference so don't rely on it
+    /// Get a specific type out of the variant, this is just a reference so don't rely on it to last long
     /// NOTE: This will throw if trying to get a type that doesn't match what is current set
     ///
     template <typename T>
     const T& get() const;
+
+    ///
+    /// Get a specific type out of the variant, this is just a reference so don't rely on it to last long
+    /// NOTE: This will throw if trying to get a type that doesn't match what is current set
+    ///
+    template <typename T>
+    T& get();
 
 private: //////////////////////////////////////////////////////////////////////
     ///

@@ -68,3 +68,19 @@ const T& variant<variant_Ts...>::get() const
 
     return *reinterpret_cast<const T*>(&storage);
 }
+
+//
+// ############################################################################
+//
+
+template <typename... variant_Ts>
+template <typename T>
+T& variant<variant_Ts...>::get()
+{
+    if (set_index != detail::get_matching_type<T, variant_Ts...>())
+    {
+        throw std::logic_error("Tried to get an invalid type out of an optional!");
+    }
+
+    return *reinterpret_cast<T*>(&storage);
+}
