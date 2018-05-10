@@ -19,6 +19,13 @@ public: ///////////////////////////////////////////////////////////////////////
     variant() = default;
 
     ///
+    /// This allows for implicit conversion between T and this variant
+    /// TODO
+    ///
+    template <typename T>
+    variant(const T& t) = delete;
+
+    ///
     ///
     ///
     ~variant();
