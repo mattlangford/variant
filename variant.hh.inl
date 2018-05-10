@@ -44,13 +44,13 @@ void variant<variant_Ts...>::operator=(T&& t)
 {
     detail::destruct_object_at_index<variant_Ts...>(&storage, set_index);
 
+    set_index = detail::get_matching_type<T, variant_Ts...>();
     if (set_index < 0)
     {
         throw std::logic_error("Tried to put a bad type into an optional!");
     }
 
     new (static_cast<void*>(&storage)) T(std::move(t));
-    set_index = detail::get_matching_type<T, variant_Ts...>();
 }
 
 //

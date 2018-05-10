@@ -28,7 +28,6 @@ my_variant generate_variant()
 {
     my_variant res;
     res = T(12);
-    std::cout << "res set!\n";
     return res;
 }
 
@@ -43,13 +42,18 @@ int main()
 {
     my_variant v = generate_variant();
 
+    std::cout << "This should print '12' ===================\n";
     v.get<T>().print();
 
+    std::cout << "This should print 'deconstruct' ==================\n";
     v = std::string("test_value");
 
-    std::cout << "new variant: " << v.get<std::string>() << "\n";
+    std::cout << "This should print 'test_valud' ===================\n";
+    std::cout << v.get<std::string>() << "\n";
 
+    std::cout << "This should print 'string visited' ===================\n";
     v.apply_visitor<visitor>();
 
+    std::cout << "This should throw!! ====================\n";
     v.get<double>();
 }
