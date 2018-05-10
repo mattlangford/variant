@@ -5,7 +5,7 @@ namespace detail
 template <int i, typename T, typename T1>
 constexpr int get_matching_type_impl()
 {
-    return -1;
+    return std::is_same<T, T1>::value ? i : -1;
 }
 
 template <int i, typename T, typename T1, typename T2, typename... Ts>

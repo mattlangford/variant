@@ -34,10 +34,11 @@ public: ///////////////////////////////////////////////////////////////////////
 
     ///
     /// Apply a struct with a call operator defined for each type in the variant. The correct operator will be called
-    /// depending on what the variant is holding (if it's holding anything)
+    /// depending on what the variant is holding (if it's holding anything). The visitor can also take arguments that
+    /// will be passed into it (if any extra are needed)
     ///
-    template <typename visitor>
-    void apply_visitor();
+    template <typename visitor, typename... Args>
+    void apply_visitor(Args... args);
 
     ///
     /// Set the variant with a const reference, this will deconstruct whatever is being held by the variant and create
