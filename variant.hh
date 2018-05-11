@@ -38,7 +38,7 @@ public: ///////////////////////////////////////////////////////////////////////
     /// will be passed into it (if any extra are needed)
     ///
     template <typename visitor, typename... Args>
-    void apply_visitor(Args... args);
+    void apply_visitor(Args... args) const;
 
     ///
     /// Set the variant with a const reference, this will deconstruct whatever is being held by the variant and create

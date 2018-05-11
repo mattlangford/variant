@@ -17,7 +17,7 @@ variant<variant_Ts...>::~variant()
 
 template <typename... variant_Ts>
 template <typename visitor, typename... Args>
-void variant<variant_Ts...>::apply_visitor(Args... args)
+void variant<variant_Ts...>::apply_visitor(Args... args) const
 {
     detail::visit_helpers<Args...>::template visit<visitor, variant_Ts...>(&storage, set_index, args...);
 }
