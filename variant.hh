@@ -14,9 +14,8 @@ public: ///////////////////////////////////////////////////////////////////////
     ///
     ///
     variant()
-        : storage({0})
+        : storage({77})
     {
-        std::cout << "constructing variant at: " << this << "\n";
     }
 
     ///

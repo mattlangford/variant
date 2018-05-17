@@ -26,7 +26,6 @@ template <typename... variant_Ts>
 variant<variant_Ts...>::~variant()
 {
     detail::destruct_object_at_index<decltype(storage), variant_Ts...>(storage, set_index);
-    std::cout << "deleted\n";
 }
 
 //
@@ -112,7 +111,6 @@ void variant<variant_Ts...>::set(T&& t)
     }
 
     new (static_cast<void*>(&storage)) T(std::move(t));
-    std::cout << "new: " << &storage << " (" << typeid(T).name() << ")\n";
 }
 //
 // ############################################################################
