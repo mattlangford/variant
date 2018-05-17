@@ -36,8 +36,8 @@ variant<variant_Ts...>::~variant()
 template <typename... variant_Ts>
 variant<variant_Ts...>& variant<variant_Ts...>::operator=(const variant<variant_Ts...>& t)
 {
-    detail::copy_object_at_index<decltype(storage), variant_Ts...>(t.storage, storage, set_index);
     set_index = t.set_index;
+    detail::copy_object_at_index<decltype(storage), variant_Ts...>(t.storage, storage, set_index);
     return *this;
 }
 
@@ -49,7 +49,7 @@ template <typename... variant_Ts>
 template <typename visitor, typename... Args>
 void variant<variant_Ts...>::apply_visitor(Args... args) const
 {
-    detail::visit_helpers<Args...>::template visit<decltype(storage), visitor, variant_Ts...>(storage, set_index, args...);
+    detail::visit_helpers<decltype(storage), Args...>::template visit<visitor, variant_Ts...>(storage, set_index, args...);
 }
 
 //
@@ -60,7 +60,7 @@ template <typename... variant_Ts>
 template <typename T>
 const T& variant<variant_Ts...>::get() const
 {
-    if (set_index != detail::get_matching_type<T, variant_Ts...>())
+    if (set_index != detail::get_matching_type<typename std::decay<T>::type, variant_Ts...>())
     {
         throw std::logic_error("Tried to get an invalid type out of an optional!");
     }
@@ -76,7 +76,7 @@ template <typename... variant_Ts>
 template <typename T>
 T& variant<variant_Ts...>::get()
 {
-    if (set_index != detail::get_matching_type<T, variant_Ts...>())
+    if (set_index != detail::get_matching_type<typename std::decay<T>::type, variant_Ts...>())
     {
         throw std::logic_error("Tried to get an invalid type out of an optional!");
     }

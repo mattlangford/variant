@@ -3,26 +3,33 @@
 namespace detail
 {
 
-template <typename... Args>
+template <typename storage_type, typename... Args>
 struct visit_helpers
 {
+
+template <typename visitor, typename T>
+static void apply(const storage_type& data, Args... args)
+{
+    visitor v;
+    v(*reinterpret_cast<const T*>(&data), args...);
+}
+
 template <int i, typename visitor, typename T>
-static void visit_impl(const void *data, const int index, Args... args)
+static void visit_impl(const storage_type& data, const int index, Args... args)
 {
     if (index == i)
     {
-        visitor v;
-        v(*static_cast<const T*>(data), args...);
+        apply<visitor, T>(data, args...);
     }
 }
 
 template <int i, typename visitor, typename T, typename T2, typename... Ts>
-static void visit_impl(const void *data, const int index, Args... args)
+static void visit_impl(const storage_type &data, const int index, Args... args)
 {
+
     if (index == i)
     {
-        visitor v;
-        v(*static_cast<const T*>(data), args...);
+        apply<visitor, T>(data, args...);
     }
     else
     {
@@ -30,13 +37,13 @@ static void visit_impl(const void *data, const int index, Args... args)
     }
 }
 
-template <typename storage_type, typename visitor, typename... Ts>
+template <typename visitor, typename... Ts>
 static void visit(const storage_type& data, const int index, Args... args)
 {
     if (index < 0)
         return;
 
-    visit_impl<0, visitor, Ts...>(static_cast<const void*>(&data), index, args...);
+    visit_impl<0, visitor, Ts...>(data, index, args...);
 }
 };
 
