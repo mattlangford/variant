@@ -3,6 +3,7 @@ cc_library(
     srcs = [],
     hdrs = ["variant.hh",
             "variant.hh.inl",
+            "copy.hh",
             "deconstruct.hh",
             "max.hh",
             "matching_types.hh",

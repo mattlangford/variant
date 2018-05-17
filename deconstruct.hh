@@ -1,13 +1,22 @@
 #pragma once
+#include <type_traits>
+#include <iostream>
 
 namespace detail
 {
+
+template <typename T>
+void deconstruct(void *data)
+{
+    reinterpret_cast<T*>(data)->~T();
+}
+
 template <int i, typename T>
 void destruct_object_at_index_impl(void* data, const int index)
 {
     if (index == i)
     {
-        static_cast<T*>(data)->~T();
+        deconstruct<T>(data);
     }
 }
 
@@ -16,20 +25,20 @@ void destruct_object_at_index_impl(void* data, const int index)
 {
     if (index == i)
     {
-        static_cast<T*>(data)->~T();
+        deconstruct<T>(data);
     }
     else
     {
-        destruct_object_at_index_impl<i + 1, T2, Ts...>(data, index + 1);
+        destruct_object_at_index_impl<i + 1, T2, Ts...>(data, index);
     }
 }
 
-template <typename... Ts>
-void destruct_object_at_index(void *data, const int index)
+template <typename storage_type, typename... Ts>
+void destruct_object_at_index(storage_type &data, const int index)
 {
-    if (data == nullptr || index < 0)
+    if (index < 0)
         return;
 
-    destruct_object_at_index_impl<0, Ts...>(data, index);
+    destruct_object_at_index_impl<0, Ts...>(static_cast<void*>(&data), index);
 }
 }

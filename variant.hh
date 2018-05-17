@@ -1,12 +1,9 @@
 #pragma once
 #include <string>
-#include <type_traits>
 #include <tuple>
+#include <iostream>
 
-#include "deconstruct.hh"
-#include "matching_types.hh"
 #include "max.hh"
-#include "visit.hh"
 
 template <typename... Ts>
 class variant
@@ -16,25 +13,28 @@ public: ///////////////////////////////////////////////////////////////////////
     ///
     ///
     ///
-    variant() = default;
+    variant()
+        : storage({0})
+    {
+        std::cout << "constructing variant at: " << this << "\n";
+    }
 
     ///
     ///
     ///
-    variant(const variant& rhs) = default;
-
-    ///
-    ///
-    ///
-    variant(variant&& rhs) = default;
+    variant(const variant& rhs);
 
     ///
     ///
     ///
     ~variant();
 
-public: ///////////////////////////////////////////////////////////////////////
+    ///
+    /// Reconstruct the type of the other variant, and copy it into the storage of this one
+    ///
+    variant<Ts...>& operator=(const variant<Ts...>& t);
 
+public: ///////////////////////////////////////////////////////////////////////
     ///
     /// Apply a struct with a call operator defined for each type in the variant. The correct operator will be called
     /// depending on what the variant is holding (if it's holding anything). The visitor can also take arguments that
@@ -44,33 +44,21 @@ public: ///////////////////////////////////////////////////////////////////////
     void apply_visitor(Args... args) const;
 
     ///
-    /// Set the variant with a const reference, this will deconstruct whatever is being held by the variant and create
-    /// a copy of the object passed in
-    /// NOTE: This will throw if trying to put an invalid type in
-    ///
-    template <typename T>
-    void operator=(const T& t);
-
-    ///
-    /// Set the variant with an rvalue reference, this will deconstruct whatever is being held by the variant
-    /// NOTE: This will throw if trying to put an invalid type in
-    ///
-    template <typename T>
-    void operator=(T&& t);
-
-    ///
     /// Get a specific type out of the variant, this is just a reference so don't rely on it to last long
     /// NOTE: This will throw if trying to get a type that doesn't match what is current set
     ///
     template <typename T>
     const T& get() const;
-
-    ///
-    /// Get a specific type out of the variant, this is just a reference so don't rely on it to last long
-    /// NOTE: This will throw if trying to get a type that doesn't match what is current set
-    ///
     template <typename T>
     T& get();
+
+    ///
+    /// Set the variant with the specified type, this will throw if the type isn't there
+    ///
+    template <typename T>
+    void set(const T& t);
+    template <typename T>
+    void set(T&& t);
 
 private: //////////////////////////////////////////////////////////////////////
     ///

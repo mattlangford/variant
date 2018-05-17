@@ -9,3 +9,9 @@ cc_test(
     srcs = ["visitor_test.cc"],
     deps = ["//:variant"]
 )
+
+cc_test(
+    name = "crash_test",
+    srcs = ["crash_test.cc"],
+    deps = ["//:variant"]
+)

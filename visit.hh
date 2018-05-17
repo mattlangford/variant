@@ -30,13 +30,13 @@ static void visit_impl(const void *data, const int index, Args... args)
     }
 }
 
-template <typename visitor, typename... Ts>
-static void visit(const void *data, const int index, Args... args)
+template <typename storage_type, typename visitor, typename... Ts>
+static void visit(const storage_type& data, const int index, Args... args)
 {
-    if (data == nullptr || index < 0)
+    if (index < 0)
         return;
 
-    visit_impl<0, visitor, Ts...>(data, index, args...);
+    visit_impl<0, visitor, Ts...>(static_cast<const void*>(&data), index, args...);
 }
 };
 
