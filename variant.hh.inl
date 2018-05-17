@@ -14,8 +14,8 @@
 template <typename... variant_Ts>
 variant<variant_Ts...>::variant(const variant<variant_Ts...>& rhs)
 {
-    detail::copy_object_at_index<decltype(storage), variant_Ts...>(rhs.storage, storage, set_index);
     set_index = rhs.set_index;
+    detail::copy_object_at_index<decltype(storage), variant_Ts...>(rhs.storage, storage, set_index);
 }
 
 //

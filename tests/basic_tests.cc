@@ -27,7 +27,7 @@ using my_variant = variant<T, std::string, double>;
 my_variant generate_variant()
 {
     my_variant res;
-    res = T(12);
+    res.set(T(12));
     return res;
 }
 
@@ -46,7 +46,7 @@ int main()
     v.get<T>().print();
 
     std::cout << "This should print 'deconstruct' ==================\n";
-    v = std::string("test_value");
+    v.set(std::string("test_value"));
 
     std::cout << "This should print 'test_valud' ===================\n";
     std::cout << v.get<std::string>() << "\n";

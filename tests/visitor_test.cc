@@ -26,7 +26,7 @@ int main()
     std::string total_string;
 
     my_variant v;
-    v = std::string("test_string");
+    v.set(std::string("test_string"));
     v.apply_visitor<visitor, std::string&>(total_string);
     v.apply_visitor<visitor, std::string&>(total_string);
 
