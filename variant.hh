@@ -52,6 +52,12 @@ public: ///////////////////////////////////////////////////////////////////////
     T& get();
 
     ///
+    /// Does this variant contain T?
+    ///
+    template <typename T>
+    bool has_type() const;
+
+    ///
     /// Set the variant with the specified type, this will throw if the type isn't there
     ///
     template <typename T>

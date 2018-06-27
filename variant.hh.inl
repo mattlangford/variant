@@ -59,9 +59,9 @@ template <typename... variant_Ts>
 template <typename T>
 const T& variant<variant_Ts...>::get() const
 {
-    if (set_index != detail::get_matching_type<typename std::decay<T>::type, variant_Ts...>())
+    if (has_type<T>() == false)
     {
-        throw std::logic_error("Tried to get an invalid type out of an optional!");
+        throw std::logic_error("Tried to get an invalid type out of an variant!");
     }
 
     return *reinterpret_cast<const T*>(&storage);
@@ -75,12 +75,23 @@ template <typename... variant_Ts>
 template <typename T>
 T& variant<variant_Ts...>::get()
 {
-    if (set_index != detail::get_matching_type<typename std::decay<T>::type, variant_Ts...>())
+    if (has_type<T>() == false)
     {
-        throw std::logic_error("Tried to get an invalid type out of an optional!");
+        throw std::logic_error("Tried to get an invalid type out of an variant!");
     }
 
     return *reinterpret_cast<T*>(&storage);
+}
+
+//
+// ############################################################################
+//
+
+template <typename... variant_Ts>
+template <typename T>
+bool variant<variant_Ts...>::has_type() const
+{
+    return set_index == detail::get_matching_type<typename std::decay<T>::type, variant_Ts...>();
 }
 
 //
@@ -107,7 +118,7 @@ void variant<variant_Ts...>::set(T&& t)
     set_index = detail::get_matching_type<typename std::decay<T>::type, variant_Ts...>();
     if (set_index < 0)
     {
-        throw std::logic_error("Tried to put a bad type into an optional!");
+        throw std::logic_error("Tried to put a bad type into an variant!");
     }
 
     new (static_cast<void*>(&storage)) T(std::move(t));
